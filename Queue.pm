@@ -1,5 +1,5 @@
 package Apache::Queue;
-$VERSION = 0.2;
+$VERSION = 0.3;
 use strict;
 use Apache::Constants qw( :response :methods :http );
 use Apache::File;
@@ -292,38 +292,38 @@ Apache::Queue - An HTTP file queueing system.
 
 =head1 SYNOPSIS
 
-#httpd.conf
-<Directory "/usr/local/apache/htdocs/files">
-  SetHandler perl-script
-  PerlHandler Apache::Queue
-  
-  # the size of the queue (default: 300)
-  PerlSetVar QueueSize 300
-
-  # how many simultanious file transfers
-  # before queueing (default: 10)
-  PerlSetVar MaxSends 10
-
-  # Location of queue files (default: /tmp)
-  # This path must be writable by the Apache
-  # process
-  PerlSetVar QueuePath /tmp
-
-  # Location of customized templates if needed
-  # Do not set this if you wish to use the internal templates
-  # Templates are process by Template-Toolkit, see
-  # http://www.template-toolkit.org for docs
-  #
-  # There are 4 template files needed.
-  #  queue_send.html     - The "Your download should start..." page
-  #  queue_sending.html  - Notifys the visitor of an existing download
-  #  queue_position.html - Page used while a user is inline
-  #  queue_full.html     - Tells the queue is full
-  # 
-  # View the defaults in the module for samples
-  PerlSetVar TemplatePath /usr/local/apache/templates
-
-</Directory>
+  #httpd.conf
+  <Directory "/usr/local/apache/htdocs/files">
+    SetHandler perl-script
+    PerlHandler Apache::Queue
+    
+    # the size of the queue (default: 300)
+    PerlSetVar QueueSize 300
+    
+    # how many simultanious file transfers
+    # before queueing (default: 10)
+    PerlSetVar MaxSends 10
+    
+    # Location of queue files (default: /tmp)
+    # This path must be writable by the Apache
+    # process
+    PerlSetVar QueuePath /tmp
+    
+    # Location of customized templates if needed
+    # Do not set this if you wish to use the internal templates
+    # Templates are process by Template-Toolkit, see
+    # http://www.template-toolkit.org for docs
+    #
+    # There are 4 template files needed.
+    #  queue_send.html     - The "Your download should start..." page
+    #  queue_sending.html  - Notifys the visitor of an existing download
+    #  queue_position.html - Page used while a user is inline
+    #  queue_full.html     - Tells the queue is full
+    # 
+    # View the defaults in the module for samples
+    PerlSetVar TemplatePath /usr/local/apache/templates
+    
+  </Directory>
 
 =head1 DESCRIPTION
 

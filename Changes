@@ -1,0 +1,14 @@
+Revision history for Perl extension Apache::Queue.
+
+0.3   Thu Apr  3 2003
+        - Fixed some more install bugs, the cpan guys are thorough :)
+
+0.2   Wed Apr  2 2003
+	- Added QueuePath option, to support more operating systems and
+          multiple queues
+
+        - Added tests for 'make test'
+
+0.1   Tue Apr  1 2003
+        - Initial release
+
