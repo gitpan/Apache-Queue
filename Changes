@@ -1,4 +1,6 @@
 Revision history for Perl extension Apache::Queue.
+0.5   Mon Sep 13 2004
+	- Fixed bug in send queue.  Left out a $
 
 0.4   Wed Aug  4 2004
 	- Updated for mod_perl 2.x

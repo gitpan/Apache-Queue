@@ -1,5 +1,5 @@
 package Apache::Queue;
-$VERSION = 0.4;
+$VERSION = 0.5;
 use strict;
 use Apache2 ();
 use Apache::Connection;
@@ -52,7 +52,7 @@ sub handler {
     my($time, $sending, $visitor) = split(/\|/, $sends[$pos]);
     if($sending < 1) {  
       # The visitor was waiting, starting download
-      $sends[pos] = "$now|1|$host";
+      $sends[$pos] = "$now|1|$host";
       $s->sync();
  
       $status = send_file($r);
