@@ -1,4 +1,4 @@
-Apache::Queue version 0.2
+Apache::Queue version 0.4
 =========================
 
 INSTALLATION
@@ -14,8 +14,13 @@ DEPENDENCIES
 
 This module requires these other modules and libraries:
 
-  Apache::Constants
-  Apache::File
+  Apache2
+  Apache::Connection
+  Apache::RequestIO
+  Apache::RequestRec
+  Apache::RequestUtil
+  Apache::SubRequest
+  Apache::Const
   Apache::Log
   Fcntl
   DB_File

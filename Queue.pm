@@ -1,8 +1,13 @@
 package Apache::Queue;
-$VERSION = 0.3;
+$VERSION = 0.4;
 use strict;
-use Apache::Constants qw( :response :methods :http );
-use Apache::File;
+use Apache2 ();
+use Apache::Connection;
+use Apache::RequestIO;
+use Apache::RequestRec;
+use Apache::RequestUtil;
+use Apache::SubRequest;
+use Apache::Const qw( :common :methods :http );
 use Apache::Log;
 use Fcntl;
 use DB_File;
@@ -11,10 +16,13 @@ use Template;
 use vars qw( @sends @queue $r $template );
 
 sub handler {
-  $r         = shift;
+  $r = shift;
+
+  return DECLINED unless ($r->is_initial_req());
+
   my $status = OK;
   my ($found, $x, $pos );
-  my $host = $r->get_remote_host;
+  my $host = $r->connection->remote_host;
 
   my $max_sends  = $r->dir_config("MaxSends") || 10;
   my $queue_size = $r->dir_config("QueueSize") || 300;
@@ -108,58 +116,9 @@ sub handler {
 }
 
 sub send_file {
-    my $r = shift;
-    
-    if ((my $rc = $r->discard_request_body) != OK) {
-      return $rc;
-    }
- 
-    if ($r->method_number == M_INVALID) {
-      $r->log->error("Invalid method in request ", $r->the_request);
-      return NOT_IMPLEMENTED;
-    }
- 
-    if ($r->method_number == M_OPTIONS) {
-      return DECLINED; #http_core.c:default_handler() will pick this up
-    }
- 
-    if ($r->method_number == M_PUT) {
-      return HTTP_METHOD_NOT_ALLOWED;
-    }
- 
-    unless (-e $r->finfo) {
-      $r->log->error("File does not exist: ", $r->filename);
-      return NOT_FOUND;
-    }
- 
-    if ($r->method_number != M_GET) {
-      return HTTP_METHOD_NOT_ALLOWED;
-    }
- 
-    my $fh = Apache::File->new($r->filename);
-    unless ($fh) {
-      $r->log->error("file permissions deny server access: ", 
-                   $r->filename);
-      return FORBIDDEN;
-    }
- 
-    $r->update_mtime(-s $r->finfo);
-    $r->set_last_modified;
-    $r->set_etag;
- 
-    if((my $rc = $r->meets_conditions) != OK) {
-      return $rc;
-    }
- 
-    $r->set_content_length;
-    $r->send_http_header;
-
-    unless ($r->header_only) {
-    $r->send_fd($fh);
-  }
- 
-  close $fh;
-  return OK;
+  my $r = shift;
+  my $sub = $r->lookup_uri($r->uri);
+  return $sub->run();
 }
 
 sub show_template {
@@ -178,7 +137,6 @@ sub show_template {
   });
 
   $r->content_type("text/html");
-  $r->send_http_header();  
 
   my $path = $r->dir_config("TemplatePath");
   if($path ne '') {

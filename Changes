@@ -1,5 +1,8 @@
 Revision history for Perl extension Apache::Queue.
 
+0.4   Wed Aug  4 2004
+	- Updated for mod_perl 2.x
+
 0.3   Thu Apr  3 2003
         - Fixed some more install bugs, the cpan guys are thorough :)
 
