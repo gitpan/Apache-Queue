@@ -1,5 +1,5 @@
 package Apache::Queue;
-
+$VERSION = 0.2;
 use strict;
 use Apache::Constants qw( :response :methods :http );
 use Apache::File;
@@ -13,14 +13,15 @@ use vars qw( @sends @queue $r $template );
 sub handler {
   $r         = shift;
   my $status = OK;
-  my ($found, $x, $pos, $status);
+  my ($found, $x, $pos );
   my $host = $r->get_remote_host;
 
   my $max_sends  = $r->dir_config("MaxSends") || 10;
   my $queue_size = $r->dir_config("QueueSize") || 300;
+  my $tmpdir = $r->dir_config("QueuePath") || "/tmp";
 
-  my $s = tie @sends, 'DB_File', '/tmp/apache_queue-sends', O_RDWR|O_CREAT, 0666, $DB_RECNO;
-  my $q = tie @queue, 'DB_File', '/tmp/apache_queue-queue', O_RDWR|O_CREAT, 0666, $DB_RECNO;
+  my $s = tie @sends, 'DB_File', "$tmpdir/apache_queue-sends", O_RDWR|O_CREAT, 0666, $DB_RECNO;
+  my $q = tie @queue, 'DB_File', "$tmpdir/apache_queue-queue", O_RDWR|O_CREAT, 0666, $DB_RECNO;
 
   my $now = time;
   @sends = grep { $now-$_ < 300 } @sends;
@@ -302,6 +303,11 @@ Apache::Queue - An HTTP file queueing system.
   # how many simultanious file transfers
   # before queueing (default: 10)
   PerlSetVar MaxSends 10
+
+  # Location of queue files (default: /tmp)
+  # This path must be writable by the Apache
+  # process
+  PerlSetVar QueuePath /tmp
 
   # Location of customized templates if needed
   # Do not set this if you wish to use the internal templates

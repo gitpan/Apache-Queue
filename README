@@ -1,0 +1,17 @@
+To install Apache::Queue run the following:
+
+perl Makefile.PL
+make
+make install
+
+view perldoc Apache::Queue after installation for more info
+
+ 0.2
+-----
+  - Added test scripts during install
+  - Added QueuePath option to support more OS's, and multiple queues
+
+ 0.1
+-----
+  - Initial Release
+
