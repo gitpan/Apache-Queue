@@ -1,4 +1,7 @@
 Revision history for Perl extension Apache::Queue.
+0.6   Wed Feb  8 2006
+  - Changed from using remote_host to remote_ip
+
 0.5   Mon Sep 13 2004
 	- Fixed bug in send queue.  Left out a $
 

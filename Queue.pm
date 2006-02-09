@@ -1,5 +1,5 @@
 package Apache::Queue;
-$VERSION = 0.5;
+$VERSION = 0.6;
 use strict;
 use Apache2 ();
 use Apache::Connection;
@@ -22,7 +22,7 @@ sub handler {
 
   my $status = OK;
   my ($found, $x, $pos );
-  my $host = $r->connection->remote_host;
+  my $host = $r->connection->remote_ip;
 
   my $max_sends  = $r->dir_config("MaxSends") || 10;
   my $queue_size = $r->dir_config("QueueSize") || 300;
